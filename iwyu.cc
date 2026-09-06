@@ -5540,7 +5540,9 @@ class IwyuAstConsumer
   bool VisitConceptReference(ConceptReference* concept_ref) {
     if (CanIgnoreCurrentASTNode())
       return true;
-    ReportDeclUse(CurrentLoc(), concept_ref->getNamedConcept());
+    if (const TemplateDecl* concept_decl =
+            concept_ref->getNamedConcept().getAsTemplateDecl())
+      ReportDeclUse(CurrentLoc(), concept_decl);
     // TODO(bolshakov): analyze type parameter usage.
     return Base::VisitConceptReference(concept_ref);
   }
